@@ -1,9 +1,16 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import { ResizeMode, Video } from 'expo-av';
+import { ScrollView, StyleSheet, Text, SafeAreaView, View } from 'react-native';
+
 
 export default function SobreNosotros() {
   return (
-    <View style={styles.container}>
+   
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.appBar}>
+            <Text style={styles.appBarText}>Vag - OS</Text>
+          </View> 
+
+    <ScrollView style={styles.container}>
       <Text style={styles.header}>Historia</Text>
       <Text style={styles.text}>
         El ministerio fue creado para proteger los recursos naturales y fomentar la educación ambiental.
@@ -31,11 +38,31 @@ export default function SobreNosotros() {
       <Text style={styles.text}>
         El Ministerio coordina acciones a favor del medio ambiente y fomenta la educación ecológica para toda la comunidad.
       </Text>
-    </View>
+    </ScrollView>
+    </SafeAreaView>
+    
   );
 }
 
 const styles = StyleSheet.create({
+
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#E8F5E9',
+  },
+  appBar: {
+    height: 60,
+    backgroundColor: '#c5f8caff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  appBarText: {
+    color: '#2E7D32',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
   container: {
     flex: 1,
     padding: 20,
@@ -50,7 +77,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: '#558B2F',
-    marginTop: 5,
+    marginTop: 10,
+    paddingBottom: 20
   },
   video: {
     width: '100%',
