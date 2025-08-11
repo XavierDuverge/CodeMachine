@@ -1,19 +1,16 @@
 // app/(tabs)/explore.tsx
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ExploreScreen() {
+  const router = useRouter();
   return (
-
-        <SafeAreaView style={styles.safeArea}>
-          <View style={styles.appBar}>
-            <Text style={styles.appBarText}>Vag - OS</Text>
-          </View> 
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title} testID="Textprincipal">🌱 Bienvenido a la Exploración</Text>
+      <Text style={styles.title}>🌱 Bienvenido a la Exploración</Text>
 
       <Image
         source={{ uri: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80' }}
-
+        
         style={styles.image}
         resizeMode="cover"
       />
@@ -43,33 +40,15 @@ export default function ExploreScreen() {
         <Text style={styles.cardText}>
           ¿Quieres ayudar? Regístrate y sé parte de nuestras brigadas verdes.
         </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Unirme</Text>
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/login')}>
+  <Text style={styles.buttonText}>Unirme</Text>
+</TouchableOpacity>
       </View>
     </ScrollView>
-    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-
-    safeArea: {
-    flex: 1,
-    backgroundColor: '#E8F5E9',
-  },
-  appBar: {
-    height: 60,
-    backgroundColor: '#c5f8caff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  appBarText: {
-    color: '#2E7D32',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   container: {
     padding: 20,
     backgroundColor: '#e8f5e9',
