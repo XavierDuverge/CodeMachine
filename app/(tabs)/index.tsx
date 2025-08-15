@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#E8F5E9',
+     paddingTop:22, 
   },
   appBar: {
     height: 60,

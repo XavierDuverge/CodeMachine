@@ -23,7 +23,7 @@ export default function ExploreScreen() {
         <Text style={styles.cardText}>
           Consulta los servicios que ofrece el Ministerio para proteger el medio ambiente.
         </Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/screens/servicios")}>
           <Text style={styles.buttonText}>Ir a Servicios</Text>
         </TouchableOpacity>
       </View>
@@ -51,7 +51,7 @@ export default function ExploreScreen() {
        <View style={styles.card}>
         <Text style={styles.cardTitle}>Areas Protegidas</Text>
         <Text style={styles.cardText}>
-           "Conoce y respeta los espacios naturales que conservan nuestra biodiversidad."
+           Conoce y respeta los espacios naturales que conservan nuestra biodiversidad.
         </Text>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}  onPress={() => router.push("/screens/AreaProtegida")} >Unirme</Text>
@@ -61,11 +61,11 @@ export default function ExploreScreen() {
        <View style={styles.card}>
         <Text style={styles.cardTitle}>Reportar Daño</Text>
         <Text style={styles.cardText}>
-           "Reporta fácilmente daños ambientales con fotos y ubicación.
-            Revisa tus reportes y visualízalos en el mapa."
+           Reporta fácilmente daños ambientales con fotos y ubicación.
+            Revisa tus reportes y visualízalos en el mapa.
         </Text>
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}  onPress={() => router.push('/screens/Formulario')} >Unirme</Text>
+          <Text style={styles.buttonText}  onPress={() => router.push('/screens/formulario')} >Reportar</Text>
         </TouchableOpacity>
       </View>
 
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     safeArea: {
     flex: 1,
     backgroundColor: '#E8F5E9',
+     paddingTop:22, 
   },
   appBar: {
     height: 60,
