@@ -29,11 +29,11 @@ export default function ExploreScreen() {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Noticias Ambientales</Text>
+        <Text style={styles.cardTitle} >Noticias Ambientales</Text>
         <Text style={styles.cardText}>
           Mantente informado sobre el medio ambiente en República Dominicana.
         </Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/screens/noticias")} >
           <Text style={styles.buttonText}>Ver Noticias</Text>
         </TouchableOpacity>
       </View>
