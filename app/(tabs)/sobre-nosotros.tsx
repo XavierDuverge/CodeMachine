@@ -1,186 +1,195 @@
-import { ResizeMode, Video } from 'expo-av';
 import React, { useState } from 'react';
 import {
-  Dimensions,
   Modal,
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
-
-interface Section {
-  id: string;
-  icon: string;
-  title: string;
-  content: string;
-  color: string;
-}
-
-const sections: Section[] = [
+const sections = [
   {
     id: 'mission',
     icon: '🎯',
     title: 'Nuestra Misión',
-    content: 'Promover el desarrollo sostenible y la conservación de los recursos naturales, garantizando un equilibrio entre el crecimiento económico y la protección ambiental.',
+    content: 'Regir la gestión del medio ambiente, los ecosistemas y los recursos naturales, para que cumpla con las atribuciones que, de conformidad con la legislación ambiental en general, corresponden al Estado, con el fin de alcanzar el desarrollo sostenible.',
     color: '#4CAF50'
   },
   {
     id: 'vision',
     icon: '🌟',
     title: 'Nuestra Visión',
-    content: 'Ser una institución líder en gestión ambiental, reconocida por su excelencia técnica y compromiso con la sostenibilidad del territorio nacional.',
+    content: 'Ser una institución eficaz, eficiente y transparente que articula e incorpora, en forma transversal, la dimensión ambiental en las políticas públicas y que promueve el desarrollo sostenible, a fin de contribuir al mejoramiento de la calidad de vida de los dominicanos.',
     color: '#2196F3'
   },
   {
-    id: 'objectives',
+    id: 'functions',
     icon: '📋',
-    title: 'Objetivos Institucionales',
-    content: 'Implementar políticas ambientales efectivas, promover la educación ecológica, coordinar acciones de conservación y fomentar la participación ciudadana.',
+    title: 'Nuestras Funciones',
+    content: 'Elaborar, ejecutar y fiscalizar las políticas nacionales sobre medio ambiente y recursos naturales, promoviendo y estimulando las actividades de preservación, protección, restauración y uso sostenible de los mismos.',
     color: '#FF9800'
   },
   {
     id: 'commitment',
-    icon: '💡',
+    icon: '🌿',
     title: 'Nuestro Compromiso',
-    content: 'Trabajar de manera transparente y colaborativa con todos los sectores de la sociedad para construir un futuro más sostenible y resiliente.',
+    content: 'Garantizar la conservación del medio ambiente y los recursos naturales de la República Dominicana, mediante la rectoría y regulación de la política medioambiental, protegiendo todas las especies de nuestra flora y fauna.',
     color: '#9C27B0'
   }
 ];
 
 const coreValues = [
-  { icon: '🛡️', text: 'Protección', description: 'Del medio ambiente' },
-  { icon: '🌿', text: 'Sostenibilidad', description: 'En todas nuestras acciones' },
-  { icon: '🤝', text: 'Colaboración', description: 'Con la comunidad' },
-  { icon: '📚', text: 'Educación', description: 'Ambiental continua' },
-  { icon: '⚖️', text: 'Transparencia', description: 'En la gestión' },
-  { icon: '🔬', text: 'Innovación', description: 'Tecnológica y científica' }
+  { icon: '🛡️', text: 'Protección', description: 'Del patrimonio natural' },
+  { icon: '🌿', text: 'Sostenibilidad', description: 'En el desarrollo nacional' },
+  { icon: '🤝', text: 'Transparencia', description: 'En la gestión pública' },
+  { icon: '📚', text: 'Regulación', description: 'De políticas ambientales' },
+  { icon: '⚖️', text: 'Fiscalización', description: 'Del cumplimiento legal' },
+  { icon: '🔬', text: 'Innovación', description: 'En gestión ambiental' }
+];
+
+const historicalMilestones = [
+  { year: '1844', event: 'Se promulga el decreto 2295 sobre conservación de bosques y selvas de la República' },
+  { year: '1928', event: 'Se crea la Ley 944 sobre conservación de montes y aguas' },
+  { year: '1931', event: 'Se promulga la Ley 85 sobre Biodiversidad, Vida Silvestre y Caza' },
+  { year: '1933', event: 'Se delimita el primer Parque Nacional del país: Las Matas (hoy Vedado de Constanza)' },
+  { year: '1962', event: 'Se crea la Dirección General de Foresta, adscrita a Agricultura' },
+  { year: '1974', event: 'Se crea la Dirección Nacional de Parques para administrar áreas protegidas' },
+  { year: '1996', event: 'El Estado dominicano suscribe el Acuerdo de Diversidad Biológica en la ONU' },
+  { year: '2000', event: 'Creación del Ministerio de Medio Ambiente y Recursos Naturales mediante Ley 64-00' }
 ];
 
 export default function SobreNosotros() {
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [selectedSection, setSelectedSection] = useState(null);
   const [videoModalVisible, setVideoModalVisible] = useState(false);
+  const [historyModalVisible, setHistoryModalVisible] = useState(false);
 
-  const SectionCard: React.FC<{ section: Section; index: number }> = ({ section, index }) => (
+  const SectionCard = ({ section, index }) => (
     <TouchableOpacity 
       style={[styles.sectionCard, { borderLeftColor: section.color }]}
-      activeOpacity={0.8}
       onPress={() => setSelectedSection(section.id)}
     >
       <View style={styles.sectionHeader}>
         <View style={[styles.iconContainer, { backgroundColor: section.color + '20' }]}>
           <Text style={styles.sectionIcon}>{section.icon}</Text>
         </View>
-        <View style={styles.sectionTitleContainer}>
+        <View style={styles.titleContainer}>
           <Text style={styles.sectionTitle}>{section.title}</Text>
-          <View style={[styles.indicator, { backgroundColor: section.color }]} />
+          <View style={[styles.underline, { backgroundColor: section.color }]} />
         </View>
       </View>
-      <Text style={styles.sectionPreview} numberOfLines={2}>
-        {section.content}
+      <Text style={styles.sectionContent}>
+        {section.content.substring(0, 100)}...
       </Text>
-      <TouchableOpacity style={styles.readMoreButton}>
-        <Text style={[styles.readMoreText, { color: section.color }]}>
-          Leer más →
-        </Text>
-      </TouchableOpacity>
+      <Text style={[styles.readMoreButton, { color: section.color }]}>
+        Leer más →
+      </Text>
     </TouchableOpacity>
   );
 
-  const ValueItem: React.FC<{ value: typeof coreValues[0]; index: number }> = ({ value, index }) => (
-    <TouchableOpacity style={styles.valueItem} activeOpacity={0.8}>
+  const ValueItem = ({ value, index }) => (
+    <View style={styles.valueCard}>
       <View style={styles.valueIconContainer}>
         <Text style={styles.valueIcon}>{value.icon}</Text>
       </View>
       <Text style={styles.valueText}>{value.text}</Text>
       <Text style={styles.valueDescription}>{value.description}</Text>
-    </TouchableOpacity>
+    </View>
   );
 
   const selectedSectionData = sections.find(s => s.id === selectedSection);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#1B5E20" />
-      
-      {/* Header profesional */}
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <View style={styles.logoContainer}>
-            <View style={styles.logo}>
-              <Text style={styles.logoIcon}>🏛️</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <View style={styles.logoContainer}>
+              <View style={styles.logoIcon}>
+                <Text style={styles.logoEmoji}>🏛️</Text>
+              </View>
+              <View>
+                <Text style={styles.headerTitle}>MMARN</Text>
+                <Text style={styles.headerSubtitle}>Ministerio de Medio Ambiente</Text>
+              </View>
             </View>
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.headerTitle}>Vag-OS</Text>
-              <Text style={styles.headerSubtitle}>Sistema de Gestión Ambiental</Text>
-            </View>
+            <TouchableOpacity style={styles.menuButton}>
+              <Text style={styles.menuIcon}>⋯</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.menuButton}>
-            <Text style={styles.menuIcon}>⋯</Text>
-          </TouchableOpacity>
         </View>
-      </View>
 
-      <ScrollView 
-        style={styles.container}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
         {/* Hero Section */}
         <View style={styles.heroSection}>
-          <Text style={styles.mainTitle}>Sobre Nosotros</Text>
-          <Text style={styles.mainSubtitle}>
-            Conoce nuestra institución, valores y compromiso con el medio ambiente
+          <Text style={styles.heroTitle}>Sobre Nosotros</Text>
+          <Text style={styles.heroSubtitle}>
+            Ministerio de Medio Ambiente y Recursos Naturales de República Dominicana
           </Text>
-          <View style={styles.statsContainer}>
+          <View style={styles.heroStats}>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>🌍</Text>
-              <Text style={styles.statLabel}>Alcance Nacional</Text>
+              <Text style={styles.statIcon}>🇩🇴</Text>
+              <Text style={styles.statText}>República Dominicana</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>🤝</Text>
-              <Text style={styles.statLabel}>Colaborativo</Text>
+              <Text style={styles.statIcon}>🌳</Text>
+              <Text style={styles.statText}>Desde 2000</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statNumber}>🔬</Text>
-              <Text style={styles.statLabel}>Basado en Ciencia</Text>
+              <Text style={styles.statIcon}>⚖️</Text>
+              <Text style={styles.statText}>Ley 64-00</Text>
             </View>
           </View>
+        </View>
+
+        {/* Historia */}
+        <View style={styles.section}>
+          <Text style={styles.sectionHeaderText}>📖 Nuestra Historia</Text>
+          <TouchableOpacity 
+            style={styles.historyCard}
+            onPress={() => setHistoryModalVisible(true)}
+          >
+            <Text style={styles.historyTitle}>180 Años de Conservación</Text>
+            <Text style={styles.historySubtitle}>
+              Desde 1844, protegiendo los recursos naturales de la República Dominicana
+            </Text>
+            <View style={styles.historyItem}>
+              <Text style={styles.historyYear}>1844</Text>
+              <Text style={styles.historyEvent}>Decreto 2295 - Conservación de bosques</Text>
+            </View>
+            <Text style={styles.seeMoreButton}>Ver cronología completa →</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Secciones principales */}
-        <View style={styles.sectionsContainer}>
-          <Text style={styles.containerTitle}>📖 Información Institucional</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionHeaderText}>🎯 Información Institucional</Text>
           {sections.map((section, index) => (
             <SectionCard key={section.id} section={section} index={index} />
           ))}
         </View>
 
         {/* Video institucional */}
-        <View style={styles.videoSection}>
-          <Text style={styles.containerTitle}>🎥 Contenido Audiovisual</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionHeaderText}>🎥 Contenido Audiovisual</Text>
           <TouchableOpacity 
-            style={styles.videoPlaceholder}
+            style={styles.videoCard}
             onPress={() => setVideoModalVisible(true)}
           >
-            <View style={styles.videoIcon}>
+            <View style={styles.playButton}>
               <Text style={styles.playIcon}>▶️</Text>
             </View>
-            <Text style={styles.videoTitle}>Video Institucional</Text>
-            <Text style={styles.videoSubtitle}>Conoce más sobre nuestra labor</Text>
+            <Text style={styles.videoTitle}>Video Institucional MMARN</Text>
+            <Text style={styles.videoSubtitle}>Conoce nuestro compromiso con el medio ambiente</Text>
           </TouchableOpacity>
         </View>
 
         {/* Valores institucionales */}
-        <View style={styles.valuesSection}>
-          <Text style={styles.containerTitle}>🌱 Nuestros Valores</Text>
-          <Text style={styles.valuesDescription}>
-            Los principios que guían nuestro trabajo diario
+        <View style={styles.section}>
+          <Text style={styles.sectionHeaderText}>🌱 Nuestros Principios</Text>
+          <Text style={styles.valuesSubtitle}>
+            Los pilares que sustentan nuestra gestión ambiental
           </Text>
           <View style={styles.valuesGrid}>
             {coreValues.map((value, index) => (
@@ -190,83 +199,106 @@ export default function SobreNosotros() {
         </View>
 
         {/* Call to Action */}
-        <View style={styles.ctaSection}>
+        <View style={styles.section}>
           <View style={styles.ctaCard}>
-            <Text style={styles.ctaTitle}>🌍 Únete a Nuestros Esfuerzos</Text>
+            <Text style={styles.ctaTitle}>🌍 Protegemos Nuestro Patrimonio</Text>
             <Text style={styles.ctaText}>
-              La protección del medio ambiente es responsabilidad de todos. 
-              Descubre cómo puedes contribuir a un futuro más sostenible.
+              El Ministerio de Medio Ambiente trabaja incansablemente para garantizar 
+              la conservación de nuestros recursos naturales para las futuras generaciones.
             </Text>
             <TouchableOpacity style={styles.ctaButton}>
-              <Text style={styles.ctaButtonText}>Participar</Text>
-              <Text style={styles.ctaButtonIcon}>→</Text>
+              <Text style={styles.ctaButtonText}>Conoce Más →</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
 
+      {/* Modal de historia */}
+      <Modal
+        visible={historyModalVisible}
+        animationType="slide"
+        transparent={true}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Historia del MMARN</Text>
+              <TouchableOpacity onPress={() => setHistoryModalVisible(false)}>
+                <Text style={styles.closeButton}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.modalScroll}>
+              {historicalMilestones.map((milestone, index) => (
+                <View key={index} style={styles.milestoneItem}>
+                  <View style={styles.milestoneYear}>
+                    <Text style={styles.milestoneYearText}>{milestone.year}</Text>
+                  </View>
+                  <View style={styles.milestoneContent}>
+                    <Text style={styles.milestoneText}>{milestone.event}</Text>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
+
       {/* Modal de sección detallada */}
       <Modal
         visible={selectedSection !== null}
         animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setSelectedSection(null)}
+        transparent={true}
       >
-        <SafeAreaView style={styles.modalContainer}>
-          <View style={styles.modalHeader}>
-            <TouchableOpacity 
-              onPress={() => setSelectedSection(null)}
-              style={styles.modalCloseButton}
-            >
-              <Text style={styles.modalCloseIcon}>✕</Text>
-            </TouchableOpacity>
-            <Text style={styles.modalTitle}>Información Detallada</Text>
-            <View style={styles.modalSpacer} />
-          </View>
-          {selectedSectionData && (
-            <ScrollView style={styles.modalContent}>
-              <View style={[styles.modalIconContainer, { backgroundColor: selectedSectionData.color + '20' }]}>
-                <Text style={styles.modalIcon}>{selectedSectionData.icon}</Text>
-              </View>
-              <Text style={styles.modalSectionTitle}>{selectedSectionData.title}</Text>
-              <Text style={styles.modalSectionContent}>{selectedSectionData.content}</Text>
-              
-              <View style={styles.modalAdditionalInfo}>
-                <Text style={styles.modalSubheading}>Áreas de Enfoque</Text>
-                <Text style={styles.modalBulletPoint}>• Políticas públicas ambientales</Text>
-                <Text style={styles.modalBulletPoint}>• Educación y sensibilización</Text>
-                <Text style={styles.modalBulletPoint}>• Investigación y desarrollo</Text>
-                <Text style={styles.modalBulletPoint}>• Cooperación interinstitucional</Text>
-              </View>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Información Detallada</Text>
+              <TouchableOpacity onPress={() => setSelectedSection(null)}>
+                <Text style={styles.closeButton}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.modalScroll}>
+              {selectedSectionData && (
+                <View style={styles.detailContent}>
+                  <View style={[styles.detailIcon, { backgroundColor: selectedSectionData.color + '20' }]}>
+                    <Text style={styles.detailIconText}>{selectedSectionData.icon}</Text>
+                  </View>
+                  <Text style={styles.detailTitle}>{selectedSectionData.title}</Text>
+                  <Text style={styles.detailText}>{selectedSectionData.content}</Text>
+                  <View style={styles.legalFrame}>
+                    <Text style={styles.legalTitle}>Marco Legal y Normativo</Text>
+                    <Text style={styles.legalItem}>• Ley 64-00 de Medio Ambiente y Recursos Naturales</Text>
+                    <Text style={styles.legalItem}>• Políticas nacionales de conservación</Text>
+                    <Text style={styles.legalItem}>• Convenios internacionales ambientales</Text>
+                    <Text style={styles.legalItem}>• Regulaciones para el desarrollo sostenible</Text>
+                  </View>
+                </View>
+              )}
             </ScrollView>
-          )}
-        </SafeAreaView>
+          </View>
+        </View>
       </Modal>
 
       {/* Modal de video */}
       <Modal
         visible={videoModalVisible}
-        animationType="fade"
+        animationType="slide"
         transparent={true}
-        onRequestClose={() => setVideoModalVisible(false)}
       >
-        <View style={styles.videoModalContainer}>
-          <View style={styles.videoModalContent}>
-            <TouchableOpacity 
-              style={styles.videoCloseButton}
-              onPress={() => setVideoModalVisible(false)}
-            >
-              <Text style={styles.videoCloseIcon}>✕</Text>
-            </TouchableOpacity>
-            <Text style={styles.videoModalTitle}>Video Institucional</Text>
-            <View style={styles.videoContainer}>
-              <Video
-                source={{ uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' }}
-                useNativeControls
-                resizeMode={ResizeMode.CONTAIN}
-                style={styles.video}
-                shouldPlay={videoModalVisible}
-              />
+        <View style={styles.videoModalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Video Institucional MMARN</Text>
+              <TouchableOpacity onPress={() => setVideoModalVisible(false)}>
+                <Text style={styles.closeButton}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.videoPlaceholder}>
+              <View style={styles.videoIcon}>
+                <Text style={styles.videoIconText}>▶️</Text>
+              </View>
+              <Text style={styles.videoPlaceholderText}>Video Institucional</Text>
+              <Text style={styles.videoPlaceholderSubtext}>Próximamente disponible</Text>
             </View>
           </View>
         </View>
@@ -276,19 +308,21 @@ export default function SobreNosotros() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#f9fafb',
+  },
+  scrollView: {
+    flex: 1,
   },
   header: {
-    backgroundColor: '#1B5E20',
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    backgroundColor: '#166534',
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 4,
+    elevation: 3,
   },
   headerContent: {
     flexDirection: 'row',
@@ -299,106 +333,134 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  logo: {
+  logoIcon: {
     width: 40,
     height: 40,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 20,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 12,
   },
-  logoIcon: {
+  logoEmoji: {
     fontSize: 20,
   },
-  headerTextContainer: {
-    flex: 1,
-  },
   headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 22,
+    color: 'white',
+    fontSize: 20,
     fontWeight: 'bold',
   },
   headerSubtitle: {
     color: 'rgba(255, 255, 255, 0.8)',
     fontSize: 12,
-    marginTop: 2,
   },
   menuButton: {
     padding: 8,
   },
   menuIcon: {
-    color: '#FFFFFF',
+    color: 'white',
     fontSize: 20,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
-  scrollContent: {
-    paddingBottom: 40,
-  },
   heroSection: {
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 32,
-    paddingHorizontal: 20,
+    backgroundColor: 'white',
+    padding: 20,
     alignItems: 'center',
   },
-  mainTitle: {
+  heroTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1B5E20',
-    textAlign: 'center',
+    color: '#166534',
     marginBottom: 8,
   },
-  mainSubtitle: {
-    fontSize: 16,
-    color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 24,
+  heroSubtitle: {
+    color: '#6b7280',
     marginBottom: 24,
-    paddingHorizontal: 20,
+    textAlign: 'center',
+    paddingHorizontal: 16,
+    lineHeight: 20,
   },
-  statsContainer: {
+  heroStats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
   },
   statItem: {
     alignItems: 'center',
-    flex: 1,
   },
-  statNumber: {
+  statIcon: {
     fontSize: 24,
     marginBottom: 4,
   },
-  statLabel: {
+  statText: {
     fontSize: 12,
-    color: '#6B7280',
-    textAlign: 'center',
+    color: '#6b7280',
     fontWeight: '500',
   },
-  sectionsContainer: {
+  section: {
     paddingHorizontal: 20,
     paddingTop: 24,
   },
-  containerTitle: {
+  sectionHeaderText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1B5E20',
+    color: '#166534',
     marginBottom: 16,
   },
-  sectionCard: {
-    backgroundColor: '#FFFFFF',
+  historyCard: {
+    backgroundColor: 'white',
     borderRadius: 12,
-    padding: 16,
+    padding: 20,
+    borderLeftWidth: 4,
+    borderLeftColor: '#22c55e',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  historyTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#166534',
+    marginBottom: 8,
+  },
+  historySubtitle: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginBottom: 16,
+  },
+  historyItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  historyYear: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#22c55e',
+    marginRight: 12,
+  },
+  historyEvent: {
+    fontSize: 14,
+    color: '#111827',
+    flex: 1,
+  },
+  seeMoreButton: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#22c55e',
+  },
+  sectionCard: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 24,
     marginBottom: 16,
     borderLeftWidth: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 1,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -406,17 +468,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 12,
   },
   sectionIcon: {
-    fontSize: 20,
+    fontSize: 24,
   },
-  sectionTitleContainer: {
+  titleContainer: {
     flex: 1,
   },
   sectionTitle: {
@@ -425,50 +487,44 @@ const styles = StyleSheet.create({
     color: '#111827',
     marginBottom: 4,
   },
-  indicator: {
+  underline: {
     width: 40,
     height: 2,
     borderRadius: 1,
   },
-  sectionPreview: {
+  sectionContent: {
+    color: '#6b7280',
     fontSize: 14,
-    color: '#6B7280',
     lineHeight: 20,
     marginBottom: 12,
   },
   readMoreButton: {
-    alignSelf: 'flex-start',
-  },
-  readMoreText: {
     fontSize: 14,
     fontWeight: '600',
   },
-  videoSection: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
-  },
-  videoPlaceholder: {
-    backgroundColor: '#FFFFFF',
+  videoCard: {
+    backgroundColor: 'white',
     borderRadius: 12,
     padding: 24,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 1,
   },
-  videoIcon: {
+  playButton: {
     width: 60,
     height: 60,
-    backgroundColor: '#1B5E20',
+    backgroundColor: '#166534',
     borderRadius: 30,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 12,
   },
   playIcon: {
     fontSize: 24,
+    color: 'white',
   },
   videoTitle: {
     fontSize: 18,
@@ -478,44 +534,40 @@ const styles = StyleSheet.create({
   },
   videoSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#6b7280',
   },
-  valuesSection: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
-  },
-  valuesDescription: {
+  valuesSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 20,
+    color: '#6b7280',
     textAlign: 'center',
+    marginBottom: 20,
   },
   valuesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  valueItem: {
-    width: (width - 52) / 2,
-    backgroundColor: '#FFFFFF',
+  valueCard: {
+    backgroundColor: 'white',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 12,
     alignItems: 'center',
+    width: '48%',
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 1,
   },
   valueIconContainer: {
     width: 48,
     height: 48,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: '#f0fdf4',
     borderRadius: 24,
-    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
+    justifyContent: 'center',
+    marginBottom: 12,
   },
   valueIcon: {
     fontSize: 24,
@@ -524,20 +576,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#111827',
-    textAlign: 'center',
     marginBottom: 4,
   },
   valueDescription: {
     fontSize: 12,
-    color: '#6B7280',
+    color: '#6b7280',
     textAlign: 'center',
   },
-  ctaSection: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
-  },
   ctaCard: {
-    backgroundColor: '#1B5E20',
+    backgroundColor: '#166534',
     borderRadius: 16,
     padding: 24,
     alignItems: 'center',
@@ -545,8 +592,7 @@ const styles = StyleSheet.create({
   ctaTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
+    color: 'white',
     marginBottom: 12,
   },
   ctaText: {
@@ -557,134 +603,152 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   ctaButton: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
+    backgroundColor: 'white',
     paddingHorizontal: 24,
     paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
+    borderRadius: 8,
   },
   ctaButtonText: {
-    color: '#1B5E20',
+    color: '#166534',
     fontWeight: '600',
-    marginRight: 8,
   },
-  ctaButtonIcon: {
-    color: '#1B5E20',
-    fontWeight: 'bold',
-  },
-  // Modal styles
-  modalContainer: {
+  modalOverlay: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  videoModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    maxWidth: 400,
+    width: '100%',
+    maxHeight: 600,
   },
   modalHeader: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
-  modalCloseButton: {
-    padding: 4,
-  },
-  modalCloseIcon: {
-    fontSize: 18,
-    color: '#6B7280',
+    borderBottomColor: '#e5e7eb',
   },
   modalTitle: {
-    flex: 1,
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
-    textAlign: 'center',
   },
-  modalSpacer: {
-    width: 26,
+  closeButton: {
+    fontSize: 20,
+    color: '#6b7280',
   },
-  modalContent: {
+  modalScroll: {
+    padding: 16,
+    maxHeight: 400,
+  },
+  milestoneItem: {
+    flexDirection: 'row',
+    marginBottom: 16,
+  },
+  milestoneYear: {
+    width: 64,
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  milestoneYearText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#22c55e',
+  },
+  milestoneContent: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 24,
+    backgroundColor: '#f9fafb',
+    borderRadius: 8,
+    padding: 12,
   },
-  modalIconContainer: {
+  milestoneText: {
+    fontSize: 14,
+    color: '#111827',
+    lineHeight: 20,
+  },
+  detailContent: {
+    alignItems: 'center',
+  },
+  detailIcon: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
   },
-  modalIcon: {
-    fontSize: 36,
+  detailIconText: {
+    fontSize: 40,
   },
-  modalSectionTitle: {
+  detailTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#111827',
     textAlign: 'center',
     marginBottom: 16,
   },
-  modalSectionContent: {
-    fontSize: 16,
-    color: '#6B7280',
-    lineHeight: 24,
+  detailText: {
+    color: '#6b7280',
+    lineHeight: 22,
     marginBottom: 24,
+    textAlign: 'center',
   },
-  modalAdditionalInfo: {
-    backgroundColor: '#FFFFFF',
+  legalFrame: {
+    backgroundColor: '#f9fafb',
     borderRadius: 12,
     padding: 16,
+    width: '100%',
   },
-  modalSubheading: {
-    fontSize: 16,
+  legalTitle: {
     fontWeight: '600',
     color: '#111827',
     marginBottom: 12,
   },
-  modalBulletPoint: {
+  legalItem: {
     fontSize: 14,
-    color: '#6B7280',
-    lineHeight: 20,
+    color: '#6b7280',
     marginBottom: 4,
   },
-  videoModalContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-    justifyContent: 'center',
+  videoPlaceholder: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 8,
+    height: 200,
     alignItems: 'center',
+    justifyContent: 'center',
+    margin: 16,
   },
-  videoModalContent: {
-    width: width - 40,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 20,
-  },
-  videoCloseButton: {
-    alignSelf: 'flex-end',
-    padding: 4,
+  videoIcon: {
+    width: 64,
+    height: 64,
+    backgroundColor: '#166534',
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 12,
   },
-  videoCloseIcon: {
-    fontSize: 18,
-    color: '#6B7280',
+  videoIconText: {
+    fontSize: 24,
+    color: 'white',
   },
-  videoModalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#111827',
-    textAlign: 'center',
-    marginBottom: 16,
+  videoPlaceholderText: {
+    fontSize: 14,
+    color: '#6b7280',
   },
-  videoContainer: {
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  video: {
-    width: '100%',
-    height: 200,
+  videoPlaceholderSubtext: {
+    fontSize: 12,
+    color: '#9ca3af',
+    marginTop: 4,
   },
 });

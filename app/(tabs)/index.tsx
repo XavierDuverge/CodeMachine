@@ -16,22 +16,34 @@ const { width, height } = Dimensions.get('window');
 
 const slides = [
   {
-    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=60',
-    mensaje: 'Protege la naturaleza, es nuestro hogar.',
-    icon: '🌲',
+    img: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=60',
+    mensaje: 'República Dominicana 30x30: Conservando el 30% de nuestro territorio para 2030',
+    icon: '🏞️',
     category: 'Conservación'
   },
   {
-    img: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=800&q=60',
-    mensaje: 'Reciclar hoy es vivir mañana.',
-    icon: '♻️',
-    category: 'Reciclaje'
+    img: 'https://images.unsplash.com/photo-1569163139394-de4e4330c9f1?auto=format&fit=crop&w=800&q=60',
+    mensaje: 'Programa BIOFIN: Cerrando la brecha financiera para la biodiversidad',
+    icon: '🌱',
+    category: 'Biodiversidad'
   },
   {
-    img: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=60',
-    mensaje: 'Cada acción cuenta. Cuida el planeta.',
-    icon: '🌍',
-    category: 'Sostenibilidad'
+    img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=60',
+    mensaje: 'Fortaleciendo la resiliencia climática en zonas áridas del país',
+    icon: '🌵',
+    category: 'Resiliencia Climática'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=800&q=60',
+    mensaje: '131 áreas protegidas conservan el 25.32% de nuestro territorio',
+    icon: '🦎',
+    category: 'Áreas Protegidas'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1573160813959-4491b6a08717?auto=format&fit=crop&w=800&q=60',
+    mensaje: 'Campamento Ecohéroes: Educando a más de 1,800 estudiantes',
+    icon: '🎒',
+    category: 'Educación Ambiental'
   },
 ];
 
