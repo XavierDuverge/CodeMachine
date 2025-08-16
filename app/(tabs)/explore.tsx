@@ -1,4 +1,5 @@
 // app/(tabs)/explore.tsx
+<<<<<<< HEAD
 import { useRouter } from 'expo-router';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -11,6 +12,23 @@ export default function ExploreScreen() {
       <Image
         source={{ uri: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80' }}
         
+=======
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+const router = require("expo-router").useRouter();
+export default function ExploreScreen() {
+  return (
+
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.appBar}>
+            <Text style={styles.appBarText}>Vag - OS</Text>
+          </View> 
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title} testID="Textprincipal">🌱 Bienvenido a la Exploración</Text>
+
+      <Image
+        source={{ uri: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80' }}
+
+>>>>>>> OtraRama
         style={styles.image}
         resizeMode="cover"
       />
@@ -20,17 +38,29 @@ export default function ExploreScreen() {
         <Text style={styles.cardText}>
           Consulta los servicios que ofrece el Ministerio para proteger el medio ambiente.
         </Text>
+<<<<<<< HEAD
         <TouchableOpacity style={styles.button}>
+=======
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/screens/servicios")}>
+>>>>>>> OtraRama
           <Text style={styles.buttonText}>Ir a Servicios</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.card}>
+<<<<<<< HEAD
         <Text style={styles.cardTitle}>Noticias Ambientales</Text>
         <Text style={styles.cardText}>
           Mantente informado sobre el medio ambiente en República Dominicana.
         </Text>
         <TouchableOpacity style={styles.button}>
+=======
+        <Text style={styles.cardTitle} >Noticias Ambientales</Text>
+        <Text style={styles.cardText}>
+          Mantente informado sobre el medio ambiente en República Dominicana.
+        </Text>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/screens/noticias")} >
+>>>>>>> OtraRama
           <Text style={styles.buttonText}>Ver Noticias</Text>
         </TouchableOpacity>
       </View>
@@ -40,15 +70,67 @@ export default function ExploreScreen() {
         <Text style={styles.cardText}>
           ¿Quieres ayudar? Regístrate y sé parte de nuestras brigadas verdes.
         </Text>
+<<<<<<< HEAD
         <TouchableOpacity style={styles.button} onPress={() => router.push('/login')}>
   <Text style={styles.buttonText}>Unirme</Text>
 </TouchableOpacity>
       </View>
     </ScrollView>
+=======
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Unirme</Text>
+        </TouchableOpacity>
+      </View>
+
+       <View style={styles.card}>
+        <Text style={styles.cardTitle}>Areas Protegidas</Text>
+        <Text style={styles.cardText}>
+           Conoce y respeta los espacios naturales que conservan nuestra biodiversidad.
+        </Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}  onPress={() => router.push("/screens/AreaProtegida")} >Unirme</Text>
+        </TouchableOpacity>
+      </View>
+
+       <View style={styles.card}>
+        <Text style={styles.cardTitle}>Reportar Daño</Text>
+        <Text style={styles.cardText}>
+           Reporta fácilmente daños ambientales con fotos y ubicación.
+            Revisa tus reportes y visualízalos en el mapa.
+        </Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}  onPress={() => router.push('/screens/formulario')} >Reportar</Text>
+        </TouchableOpacity>
+      </View>
+
+    </ScrollView>
+    </SafeAreaView>
+>>>>>>> OtraRama
   );
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
+
+
+    safeArea: {
+    flex: 1,
+    backgroundColor: '#E8F5E9',
+     paddingTop:22, 
+  },
+  appBar: {
+    height: 60,
+    backgroundColor: '#c5f8caff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  appBarText: {
+    color: '#2E7D32',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+>>>>>>> OtraRama
   container: {
     padding: 20,
     backgroundColor: '#e8f5e9',

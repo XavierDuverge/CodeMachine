@@ -8,3 +8,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> OtraRama
