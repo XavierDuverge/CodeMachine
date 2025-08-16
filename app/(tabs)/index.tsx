@@ -71,7 +71,6 @@ export default function Inicio() {
 
   const handleSlidePress = (index: number) => {
     setActiveSlide(index);
-    // Aquí podrías agregar navegación a detalle
   };
 
   return (
@@ -96,9 +95,6 @@ export default function Inicio() {
                   <Text style={styles.headerSubtitle}>Sistema de Gestión Ambiental</Text>
                 </View>
               </View>
-              <TouchableOpacity style={styles.notificationButton}>
-                <Text style={styles.notificationIcon}>🔔</Text>
-              </TouchableOpacity>
             </View>
           </Animated.View>
         </View>
@@ -109,33 +105,6 @@ export default function Inicio() {
           showsVerticalScrollIndicator={false}
           bounces={true}
         >
-          {/* Hero Section */}
-          <Animated.View 
-            style={[styles.heroSection, { 
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }]
-            }]}
-          >
-            <View style={styles.heroContent}>
-              <Text style={styles.heroTitle}>🌱 Bienvenido</Text>
-              <Text style={styles.heroSubtitle}>
-                Juntos construimos un futuro sostenible para las próximas generaciones
-              </Text>
-              
-              {/* Botones de acción rápida */}
-              <View style={styles.quickActions}>
-                <TouchableOpacity style={[styles.actionButton, styles.primaryAction]}>
-                  <Text style={styles.actionIcon}>🚀</Text>
-                  <Text style={styles.actionText}>Explorar</Text>
-                </TouchableOpacity>
-                
-                <TouchableOpacity style={[styles.actionButton, styles.secondaryAction]}>
-                  <Text style={styles.actionIcon}>📱</Text>
-                  <Text style={styles.actionText}>Reportar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Animated.View>
 
           {/* Slides de iniciativas */}
           <View style={styles.slidesSection}>
