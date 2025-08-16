@@ -1,84 +1,182 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useState } from "react";
 import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList, Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from "react-native";
 
-export default function Punto3Screen() {
+const API_BASE = "https://adamix.net/medioambiente";
+
+interface AreaProtegida {
+  id: string;
+  nombre: string;
+  tipo: string;
+  descripcion: string;
+  ubicacion: string;
+  superficie: string;
+  imagen: string;
+  latitud: number;
+  longitud: number;
+}
+
+const TIPOS = [
+  { label: "Parque Nacional", value: "parque_nacional" },
+  { label: "Reserva Científica", value: "reserva_cientifica" },
+  { label: "Monumento Natural", value: "monumento_natural" },
+  { label: "Refugio de Vida Silvestre", value: "refugio_vida_silvestre" }
+];
+
+export default function AreasProtegidasScreen() {
   const router = useRouter();
-  const [open, setOpen] = useState(false); // Estado para mostrar/ocultar opciones
+  const [areas, setAreas] = useState<AreaProtegida[]>([]);
+  const [search, setSearch] = useState("");
+  const [tipo, setTipo] = useState("parque_nacional");
+  const [loading, setLoading] = useState(false);
+
+  const fetchAreas = async () => {
+    setLoading(true);
+    try {
+      const url = `${API_BASE}/areas_protegidas?tipo=${tipo}&busqueda=${encodeURIComponent(search)}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: { Accept: "application/json" }
+      });
+      const data = await response.json();
+      if (response.ok) setAreas(data);
+      else setAreas([]);
+    } catch (error) {
+      console.error("Error fetch:", error);
+      setAreas([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAreas();
+  }, []);
+
+  const handleSearch = () => fetchAreas();
+
+  const renderItem = ({ item }: { item: AreaProtegida }) => (
+    <View style={styles.card}>
+      {item.imagen && <Image source={{ uri: item.imagen }} style={styles.image} />}
+      <Text style={styles.name}>{item.nombre}</Text>
+      <Text style={styles.type}>{item.tipo}</Text>
+      <Text style={styles.description}>{item.descripcion}</Text>
+      <Text style={styles.location}>Ubicación: {item.ubicacion}</Text>
+      <Text style={styles.surface}>Superficie: {item.superficie}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Ando con juan fumando una Z</Text>
-
-      {/* Opciones desplegables */}
-      {open && (
-        <View style={styles.menu}>
-          <TouchableOpacity style={styles.option} onPress={() => (router.push('/(tabs)/sobre-nosotros'))}>
-            <Text style={styles.optionText}>Sobre nosotros</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.option} onPress={() => router.push('/(tabs)/explore')}>
-            <Text style={styles.optionText}>Explore</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.option} onPress={() => router.back()}>
-            <Text style={styles.optionText}>Home</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Botón flotante redondo */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => setOpen(!open)}
-      >
-        <Text style={styles.fabText}>{open ? "×" : "+"}</Text>
+      {/* Botón de regresar */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/(tabs)/explore')}>
+        <Text style={styles.backButtonText}>← Explorer</Text>
       </TouchableOpacity>
+
+      <Text style={styles.title}>Áreas Protegidas</Text>
+
+      {/* Selector de tipo */}
+      <View style={styles.tipoContainer}>
+        {TIPOS.map((t) => (
+          <TouchableOpacity
+            key={t.value}
+            style={[styles.tipoButton, tipo === t.value && styles.tipoButtonActive]}
+            onPress={() => setTipo(t.value)}
+          >
+            <Text style={[styles.tipoText, tipo === t.value && styles.tipoTextActive]}>
+              {t.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Barra de búsqueda */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Buscar por nombre..."
+          value={search}
+          onChangeText={setSearch}
+        />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+          <Text style={styles.searchButtonText}>Buscar</Text>
+        </TouchableOpacity>
+      </View>
+
+      {loading ? (
+        <ActivityIndicator size="large" color="#1B5E20" style={{ marginTop: 20 }} />
+      ) : (
+        <FlatList
+          data={areas}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  text: { fontSize: 20, marginBottom: 20 },
+  container: { flex: 1, padding: 20, backgroundColor: "#F8F9FA" },
+  backButton: { marginBottom: 10 },
+  backButtonText: { fontSize: 16, color: "#1B5E20", fontWeight: "bold" },
 
-  // Menú desplegable
-  menu: {
-    position: "absolute",
-    bottom: 100,
-    right: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 10,
-    elevation: 5,
+  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, textAlign: "center" },
+
+  tipoContainer: { flexDirection: "row", flexWrap: "wrap", marginBottom: 10 },
+  tipoButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: "#E5E7EB",
+    borderRadius: 20,
+    marginRight: 10,
+    marginBottom: 10,
   },
-  option: {
-    padding: 10,
-    backgroundColor: "#4caf50",
-    marginVertical: 5,
+  tipoButtonActive: { backgroundColor: "#1B5E20" },
+  tipoText: { color: "#374151", fontSize: 12 },
+  tipoTextActive: { color: "white", fontWeight: "bold" },
+
+  searchContainer: { flexDirection: "row", marginBottom: 20 },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
     borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "#FFFFFF"
   },
-  optionText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-
-  // Botón flotante
-  fab: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "#4caf50",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+  searchButton: {
+    marginLeft: 10,
+    backgroundColor: "#1B5E20",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
+    alignItems: "center"
   },
-  fabText: {
-    color: "white",
-    fontSize: 28,
-    fontWeight: "bold",
+  searchButtonText: { color: "white", fontWeight: "bold" },
+
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    elevation: 3
   },
+  image: { width: "100%", height: 150, borderRadius: 8, marginBottom: 8 },
+  name: { fontSize: 18, fontWeight: "bold", color: "#111827" },
+  type: { fontSize: 14, color: "#6B7280", marginBottom: 8 },
+  description: { fontSize: 14, color: "#374151", marginBottom: 4 },
+  location: { fontSize: 12, color: "#4B5563" },
+  surface: { fontSize: 12, color: "#4B5563" }
 });
