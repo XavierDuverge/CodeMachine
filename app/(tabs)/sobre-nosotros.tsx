@@ -111,8 +111,8 @@ export default function SobreNosotros() {
                 <Text style={styles.logoEmoji}>🏛️</Text>
               </View>
               <View>
-                <Text style={styles.headerTitle}>MMARN</Text>
-                <Text style={styles.headerSubtitle}>Ministerio de Medio Ambiente</Text>
+                <Text style={styles.headerTitle}>Vag-OS</Text>
+                <Text style={styles.headerSubtitle}>Sistema de Gestión Ambiental</Text>
               </View>
             </View>
             <TouchableOpacity style={styles.menuButton}>
