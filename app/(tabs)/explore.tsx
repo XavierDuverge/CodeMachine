@@ -26,6 +26,16 @@ export default function ExploreScreen() {
       accent: "#c5f8caff"
     },
     {
+      title: "Videos Educativos",
+      description: "Reciclaje, conservación, cambio climático y biodiversidad",
+      icon: "🎬",
+      route: "/screens/videos",        // 👈 esta es la ruta del screen
+      buttonText: "Ver",
+      color: "#ffffff",
+      accent: "#E8F5E9"
+    },
+
+    {
       title: "Voluntariado",
       description: "Únete a nuestras brigadas verdes y marca la diferencia",
       icon: "🤝",
@@ -83,25 +93,25 @@ export default function ExploreScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <View style={styles.logoContainer}>
-              <View style={styles.logoIcon}>
-                <Text style={styles.logoEmoji}>🏛️</Text>
-              </View>
-              <View>
-                <Text style={styles.headerTitle}>Vag-OS</Text>
-                <Text style={styles.headerSubtitle}>Sistema de Gestión Ambiental</Text>
-              </View>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <View style={styles.logoContainer}>
+            <View style={styles.logoIcon}>
+              <Text style={styles.logoEmoji}>🏛️</Text>
             </View>
-            <TouchableOpacity style={styles.menuButton}>
-              <Text style={styles.menuIcon}>⋯</Text>
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.headerTitle}>Vag-OS</Text>
+              <Text style={styles.headerSubtitle}>Sistema de Gestión Ambiental</Text>
+            </View>
           </View>
+          <TouchableOpacity style={styles.menuButton}>
+            <Text style={styles.menuIcon}>⋯</Text>
+          </TouchableOpacity>
         </View>
+      </View>
 
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
@@ -143,12 +153,12 @@ export default function ExploreScreen() {
                     <Text style={styles.cardIcon}>{card.icon}</Text>
                   </View>
                 </View>
-                
+
                 <View style={styles.cardCenter}>
                   <Text style={styles.cardTitle}>{card.title}</Text>
                   <Text style={styles.cardDescription}>{card.description}</Text>
                 </View>
-                
+
                 <View style={styles.cardRight}>
                   <View style={styles.button}>
                     <Text style={styles.buttonText}>{card.buttonText}</Text>
@@ -215,7 +225,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
   },
-    container: {
+  container: {
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 32,
