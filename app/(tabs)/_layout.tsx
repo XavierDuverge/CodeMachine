@@ -8,8 +8,12 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
+// 👇 Importa el contexto para cambiar el título según sesión
+import { useAuth } from '../_layout';
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { user } = useAuth();
 
   return (
     <Tabs
@@ -19,25 +23,38 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
-          ios: {
-            
-            position: 'absolute',
-          },
+          ios: { position: 'absolute' },
           default: {},
         }),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="house.fill" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="paperplane.fill" color={color} />
+          ),
+        }}
+      />
+      {/* 👇 Nueva pestaña Perfil */}
+      <Tabs.Screen
+        name="perfil"
+        options={{
+          title: user ? 'Perfil' : 'Entrar',
+          tabBarIcon: ({ color }) => (
+            // Usa un símbolo seguro en iOS; en Android IconSymbol te lo resuelve
+            <IconSymbol size={28} name="person.fill" color={color} />
+          ),
         }}
       />
     </Tabs>
