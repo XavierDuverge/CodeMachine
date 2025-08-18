@@ -2,65 +2,108 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function RegisterScreen() {
-  const [username, setUsername] = useState("");
+  const [cedula, setCedula] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [telefono, setTelefono] = useState("");
   const router = useRouter();
 
-const handleRegister = async () => {
-  if (!username || !password) {
-    Alert.alert("Error", "Ingresa usuario y contraseña");
-    return;
-  }
-
-  try {
-    const usersJSON = await AsyncStorage.getItem("users");
-    const users = usersJSON ? JSON.parse(usersJSON) : [];
-
-    // Evitar duplicados
-    if (users.find((u: any) => u.username === username)) {
-      Alert.alert("Error", "Usuario ya existe");
+  const handleRegister = async () => {
+    if (!cedula || !nombre || !email || !password || !telefono) {
+      Alert.alert("Error", "Por favor completa todos los campos.");
       return;
     }
 
-    users.push({ username, password });
-    await AsyncStorage.setItem("users", JSON.stringify(users));
+    try {
+      // Obtener usuarios existentes
+      const usersJSON = await AsyncStorage.getItem("users");
+      const users = usersJSON ? JSON.parse(usersJSON) : [];
 
-    // Marca al usuario como logueado
-    await AsyncStorage.setItem("loggedInUser", username);
+      // Verificar si ya existe el email
+      const exists = users.some((u: any) => u.email === email);
+      if (exists) {
+        Alert.alert("Error", "El usuario ya existe");
+        return;
+      }
 
-    Alert.alert("✅ Registro exitoso");
-    router.replace("/"); // Ir a Explore o Home
-  } catch (error) {
-    console.error(error);
-    Alert.alert("Error al registrar usuario");
-  }
-};
+      const newUser = { cedula, nombre, email, password, telefono };
+      users.push(newUser);
+      await AsyncStorage.setItem("users", JSON.stringify(users));
 
+      // Guardar sesión automáticamente
+      await AsyncStorage.setItem("rememberedUser", email);
+
+      Alert.alert("✅ Registro exitoso", "Usuario creado correctamente");
+      router.replace("/"); // redirige al Home
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "No se pudo registrar el usuario.");
+    }
+  };
 
   return (
     <LinearGradient colors={["#43cea2", "#78e782ff"]} style={styles.background}>
       <View style={styles.container}>
-        <Text style={styles.title}>Register</Text>
+        <Text style={styles.title}>Registro</Text>
+
         <TextInput
           style={styles.input}
-          placeholder="Username"
+          placeholder="Cédula"
           placeholderTextColor="#ccc"
-          value={username}
-          onChangeText={setUsername}
+          value={cedula}
+          onChangeText={setCedula}
+          keyboardType="numeric"
         />
+
         <TextInput
           style={styles.input}
-          placeholder="Password"
+          placeholder="Nombre y Apellido"
+          placeholderTextColor="#ccc"
+          value={nombre}
+          onChangeText={setNombre}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Correo electrónico"
+          placeholderTextColor="#ccc"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
           placeholderTextColor="#ccc"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Teléfono"
+          placeholderTextColor="#ccc"
+          value={telefono}
+          onChangeText={setTelefono}
+          keyboardType="phone-pad"
+        />
+
         <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Text style={styles.buttonText}>Register</Text>
+          <Text style={styles.buttonText}>Registrar</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

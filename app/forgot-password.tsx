@@ -1,26 +1,46 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (!email) {
       Alert.alert("Error", "Por favor, ingresa tu correo.");
       return;
     }
 
-    // Solo mostramos un mensaje de prueba
-    Alert.alert(
-      "Funcionalidad desactivada",
-      `Se ingresó el correo: ${email} (el envío real está desactivado).`
-    );
+    try {
+      setLoading(true);
 
-    // Redirige al login si quieres
-    router.replace("/login");
+      const response = await fetch("https://adamix.net/medioambiente/docx/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo: email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert("✅ Código enviado", data.mensaje || "Revisa tu correo.");
+
+        router.push({
+          pathname: './',
+          params: { email }
+        });
+      } else {
+        Alert.alert("❌ Error", data.mensaje || "No se pudo enviar el código.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Hubo un problema al conectar con el servidor.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -36,13 +56,24 @@ export default function ForgotPasswordScreen() {
           value={email}
           onChangeText={setEmail}
         />
-        <TouchableOpacity style={styles.button} onPress={handleReset}>
-          <Text style={styles.buttonText}>Enviar enlace</Text>
+        <TouchableOpacity
+          style={[styles.button, loading && { opacity: 0.6 }]}
+          onPress={handleReset}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? "Enviando..." : "Enviar código"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => router.replace("/login")}>
+          <Text style={styles.backText}>← Volver al login</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
   );
 }
+
 
 const styles = StyleSheet.create({
   background: { flex: 1, justifyContent: "center" },
@@ -74,4 +105,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: { color: "#000", fontWeight: "bold", fontSize: 16 },
+  backText: { color: "#000", marginTop: 15, textAlign: "center" },
 });

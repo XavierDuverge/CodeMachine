@@ -14,21 +14,20 @@ import {
 } from "react-native";
 
 export default function LoginScreen() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const router = useRouter();
 
-  // Auto-login si estaba en remember me
- useEffect(() => {
-  const checkUser = async () => {
-    const userData = await AsyncStorage.getItem("rememberedUser");
-    if (userData) {
-      setLoggedIn(true); // ahora sí detecta que está logueado
-    }
-  };
-  checkUser();
-}, []);
+  useEffect(() => {
+    const checkUser = async () => {
+      const userData = await AsyncStorage.getItem("rememberedUser");
+      if (userData) {
+        router.replace("/"); // auto-login si estaba guardado
+      }
+    };
+    checkUser();
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -36,12 +35,12 @@ export default function LoginScreen() {
       const users = usersJSON ? JSON.parse(usersJSON) : [];
 
       const user = users.find(
-        (u: any) => u.username === username && u.password === password
+        (u: any) => u.email === email && u.password === password
       );
 
       if (user) {
         if (remember) {
-          await AsyncStorage.setItem("rememberedUser", username);
+          await AsyncStorage.setItem("rememberedUser", email);
         }
         Alert.alert("✅ Login exitoso");
         router.replace("/");
@@ -71,10 +70,10 @@ export default function LoginScreen() {
           <Ionicons name="person-outline" size={20} color="#999" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Username"
+            placeholder="Correo electrónico"
             placeholderTextColor="#ccc"
-            value={username}
-            onChangeText={setUsername}
+            value={email}
+            onChangeText={setEmail}
           />
         </View>
 
@@ -82,7 +81,7 @@ export default function LoginScreen() {
           <Ionicons name="lock-closed-outline" size={20} color="#999" style={styles.icon} />
           <TextInput
             style={styles.input}
-            placeholder="Password"
+            placeholder="Contraseña"
             placeholderTextColor="#ccc"
             value={password}
             onChangeText={setPassword}
@@ -135,12 +134,3 @@ const styles = StyleSheet.create({
   registerText: { color: "#fff", textAlign: "center" },
   registerLink: { fontWeight: "bold", textDecorationLine: "underline" },
 });
-// Sets a flag in AsyncStorage to indicate the user is logged in and navigates to home
-async function setLoggedIn(loggedIn: boolean) {
-  if (loggedIn) {
-    await AsyncStorage.setItem("isLoggedIn", "true");
-  } else {
-    await AsyncStorage.removeItem("isLoggedIn");
-  }
-}
-
