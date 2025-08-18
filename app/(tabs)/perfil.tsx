@@ -127,6 +127,7 @@ export default function Perfil() {
             <Text style={s.chev}>›</Text>
           </TouchableOpacity>
         </Link>
+        
       </View>
 
       <Link href="/(tabs)/perfil" asChild>

@@ -28,9 +28,6 @@ export default function ProtectedScreen({
         <TouchableOpacity onPress={() => router.replace("/(tabs)/perfil")}>
           <Text style={[s.topLink, { color: PALETTE.title }]}>← Perfil</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.replace("/")}>
-          <Text style={[s.topLink, { color: PALETTE.title }]}>Inicio</Text>
-        </TouchableOpacity>
       </View>
 
       <View style={s.body}>
@@ -45,8 +42,8 @@ const s = StyleSheet.create({
   safe: { flex: 1 },
   topbar: {
     paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 4,
+    paddingTop: 24,
+    paddingBottom: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -54,5 +51,5 @@ const s = StyleSheet.create({
   topLink: { fontWeight: "700" },
   body: { flex: 1, padding: 20, gap: 12 },
   h1: { fontSize: 22, fontWeight: "800" },
-  card: { backgroundColor: PALETTE.card, borderRadius: 16, padding: 16, borderWidth: 1 },
+ card: { backgroundColor: PALETTE.card, borderRadius: 16, padding: 16, borderWidth: 1, flex: 1 },
 });

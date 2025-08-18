@@ -9,8 +9,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "infoPlist": {
+        "NSCameraUsageDescription": "Necesitamos la cámara para tomar evidencia del daño ambiental.",
+        "NSPhotoLibraryUsageDescription": "Necesitamos acceder a tus fotos para adjuntar evidencia.",
+        "NSLocationWhenInUseUsageDescription": "Usamos tu ubicación para geolocalizar el reporte."
+      }
     },
+    "supportsTablet": true,
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
