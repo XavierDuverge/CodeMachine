@@ -1,18 +1,19 @@
+import * as ImagePicker from "expo-image-picker";
+import type { LocationObjectCoords } from "expo-location";
+import * as Location from "expo-location";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  View,
+  Alert,
+  Image,
+  Keyboard,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
   TouchableOpacity,
-  Alert,
-  Keyboard,
   TouchableWithoutFeedback,
-  Image,
+  View,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import * as Location from "expo-location";
-import type { LocationObjectCoords } from "expo-location";
 
 export default function ReportDamageScreen() {
   const [title, setTitle] = useState("");
@@ -20,6 +21,7 @@ export default function ReportDamageScreen() {
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [location, setLocation] = useState<LocationObjectCoords | null>(null);
   const [loadingLocation, setLoadingLocation] = useState(false);
+  const router = useRouter();
 
   const [errors, setErrors] = useState({
     title: false,
@@ -89,7 +91,11 @@ export default function ReportDamageScreen() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+        {/* Botón Volver */}
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <Text style={styles.backText}>← Volver</Text>
         <Text style={styles.title}>Reportar Daño Ambiental</Text>
+         </TouchableOpacity>
 
         {/* Input Título */}
         <TextInput
@@ -260,5 +266,18 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "900",
     fontSize: 20,
+  },
+  backButton: {
+    alignSelf: "flex-start",
+    marginBottom: 15,
+    backgroundColor: "#4caf50",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  backText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
   },
 });

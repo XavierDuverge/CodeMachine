@@ -1,82 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator, SafeAreaView, Button } from 'react-native';
 import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+    ActivityIndicator,
+    FlatList,
+    Image,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
+
 type Servicio = {
-    id: string;
-    nombre: string;
-    descripcion: string;
-    icono: string;
-    fecha_creacion: string;
+  id: string;
+  nombre: string;
+  descripcion: string;
+  icono: string;
+  fecha_creacion: string;
 };
 
 export default function Servicios() {
-    const [servicios, setServicios] = useState<Servicio[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const router = useRouter();
+  const [servicios, setServicios] = useState<Servicio[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-    const API_URL = 'https://api.allorigins.win/raw?url=https://adamix.net/medioambiente/servicios';
+  const API_URL =
+    'https://api.allorigins.win/raw?url=https://adamix.net/medioambiente/servicios';
 
-    useEffect(() => {
-        const fetchServicios = async () => {
-            try {
-                const res = await fetch(API_URL);
-                if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+  useEffect(() => {
+    const fetchServicios = async () => {
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
 
-                const data: Servicio[] = await res.json();
-                setServicios(data);
-            } catch (err: any) {
-                setError(`Error cargando la API: ${err.message}`);
-            } finally {
-                setLoading(false);
-            }
-        };
+        const data: Servicio[] = await res.json();
+        setServicios(data);
+      } catch (err: any) {
+        setError(`Error cargando la API: ${err.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        fetchServicios();
-    }, []);
+    fetchServicios();
+  }, []);
 
-    if (loading) return <ActivityIndicator style={{ flex: 1 }} size="large" />;
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} size="large" />;
 
-    if (error)
-        return (
-            <View style={styles.center}>
-                <Text>{error}</Text>
-            </View>
-        );
-
+  if (error)
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={styles.appBar}>
-                <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-                    <Ionicons name="arrow-back" size={24} color="black" />
-                </TouchableOpacity>
-                <Text style={styles.appBarText}>Vag - OS</Text>
-            </View>
-
-            <FlatList
-                data={servicios}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <View style={styles.card}>
-                        {item.icono ? (
-                            <Image source={{ uri: item.icono }} style={styles.icono} />
-                        ) : null}
-                        <Text style={styles.nombre}>{item.nombre}</Text>
-                        <Text style={styles.descripcion}>{item.descripcion}</Text>
-                    </View>
-                )}
-            />
-        </SafeAreaView>
+      <View style={styles.center}>
+        <Text>{error}</Text>
+      </View>
     );
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      {/* AppBar con título y botón volver */}
+      <View style={styles.appBar}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.push('/(tabs)/explore')}
+        >
+          <Text style={styles.backButtonText}>← Explorer</Text>
+        </TouchableOpacity>
+        <Text style={styles.appBarText}>Servicios Ambientales</Text>
+      </View>
+
+      <FlatList
+        data={servicios}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ padding: 16 }}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            {item.icono ? (
+              <Image source={{ uri: item.icono }} style={styles.icono} />
+            ) : null}
+            <Text style={styles.nombre}>{item.nombre}</Text>
+            <Text style={styles.descripcion}>{item.descripcion}</Text>
+          </View>
+        )}
+      />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+  safeArea: {
     flex: 1,
-    backgroundColor: '#E8F5E9',
-    paddingTop:22, 
-  },  
+    backgroundColor: '#F1F8E9',
+    paddingTop: 22,
+  },
   appBar: {
     height: 60,
     backgroundColor: '#c5f8caff',
@@ -86,46 +101,50 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
-    appBarText: {
-        color: '#2E7D32',
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    backButton: {
-        padding: 5,
-    },
-    backText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
+  appBarText: {
+    color: '#388e3c',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
+  backButton: {
+    padding: 6,
+    marginRight: 8,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#1B5E20',
+    fontWeight: 'bold',
+  },
 
-
-    card: {
-        margin: 10,
-        padding: 10,
-        borderRadius: 10,
-        backgroundColor: '#c5f8caff',
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 3,
-    },
-    icono: {
-        width: 50,
-        height: 50,
-        marginBottom: 5,
-    },
-    nombre: {
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    descripcion: {
-        marginTop: 3,
-        fontSize: 14,
-    },
-    center: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+  card: {
+    marginBottom: 16,
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: '#4CAF50',
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  icono: {
+    width: 60,
+    height: 60,
+    marginBottom: 8,
+  },
+  nombre: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: 'white',
+  },
+  descripcion: {
+    marginTop: 4,
+    fontSize: 14,
+    color: '#f1f8e9',
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

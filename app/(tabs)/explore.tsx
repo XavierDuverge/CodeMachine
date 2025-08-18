@@ -39,7 +39,7 @@ export default function ExploreScreen() {
       title: "Voluntariado",
       description: "Únete a nuestras brigadas verdes y marca la diferencia",
       icon: "🤝",
-      route: "/login",
+      route: "/screens/voluntarios",
       buttonText: "Unirse",
       color: "#ffffff",
       accent: "#E8F5E9"
@@ -88,6 +88,15 @@ export default function ExploreScreen() {
       buttonText: "Conocer",
       color: "#ffffff",
       accent: "#c5f8caff"
+    },
+    {
+      title: "Acerca de",
+      description: "Información sobre el equipo de desarrollo y el proyecto",
+      icon: "ℹ️",
+      route: "/screens/acercaDe",
+      buttonText: "Ver",
+      color: "#ffffff",
+      accent: "#E8F5E9"
     }
   ];
 

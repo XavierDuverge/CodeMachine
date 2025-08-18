@@ -1,9 +1,16 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function NormativasScreen() {
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
+        {/* Botón Volver */}
+        <TouchableOpacity style={styles.backButton} onPress={() => router.push("/(tabs)/explore")}>
+          <Text style={styles.backButtonText}>← Explorer</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>📜 Normativas Ambientales</Text>
         <View style={styles.card}>
           <Text style={styles.text}>Ley 64-00: Ley General de Medio Ambiente y Recursos Naturales.</Text>
@@ -25,4 +32,6 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "#1b5e20", textAlign: "center" },
   card: { backgroundColor: "#fff", padding: 16, borderRadius: 12, marginBottom: 16, elevation: 3 },
   text: { fontSize: 16, color: "#444" },
+   backButton: { marginBottom: 10 },
+  backButtonText: { fontSize: 16, color: '#1B5E20', fontWeight: 'bold' },
 });

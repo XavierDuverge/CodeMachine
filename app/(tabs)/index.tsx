@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const slides = [
   {
@@ -22,10 +22,10 @@ const slides = [
     category: 'Conservación'
   },
   {
-    img: 'https://images.unsplash.com/photo-1569163139394-de4e4330c9f1?auto=format&fit=crop&w=800&q=60',
+    img: 'https://images.unsplash.com/photo-1614588623348-3e3bca4d84a7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     mensaje: 'Programa BIOFIN: Cerrando la brecha financiera para la biodiversidad',
     icon: '🌱',
-    category: 'Biodiversidad'
+    category: 'Biodiversidad',
   },
   {
     img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=60',
@@ -40,18 +40,80 @@ const slides = [
     category: 'Áreas Protegidas'
   },
   {
-    img: 'https://images.unsplash.com/photo-1573160813959-4491b6a08717?auto=format&fit=crop&w=800&q=60',
+    img: 'https://images.unsplash.com/photo-1581578017306-7334b15283df?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     mensaje: 'Campamento Ecohéroes: Educando a más de 1,800 estudiantes',
     icon: '🎒',
     category: 'Educación Ambiental'
   },
 ];
 
+// Colores por categoría (para el chip y el icono)
+const CATEGORY_COLORS: Record<string, string> = {
+  'Conservación': '#2E7D32',
+  'Biodiversidad': '#1565C0',
+  'Resiliencia Climática': '#EF6C00',
+  'Áreas Protegidas': '#6A1B9A',
+  'Educación Ambiental': '#00897B',
+};
+
+// Fallback si una imagen falla
+const FALLBACK_IMG = 'https://via.placeholder.com/800x450.png?text=Medio+Ambiente';
+
+function SlideCard({
+  slide,
+  onPress,
+}: {
+  slide: { img: string; mensaje: string; icon: string; category: string };
+  onPress: () => void;
+}) {
+  const [broken, setBroken] = useState(false);
+  const color = CATEGORY_COLORS[slide.category] ?? '#1B5E20';
+
+  return (
+    <TouchableOpacity style={styles.slideCard} onPress={onPress} activeOpacity={0.9}>
+      <View style={styles.slideContent}>
+        {/* Chip de categoría */}
+        <View
+          style={[
+            styles.categoryBadge,
+            { backgroundColor: 'rgba(255,255,255,0.98)', borderColor: color, borderWidth: 1 },
+          ]}
+        >
+          <Text style={[styles.categoryText, { color }]}>{slide.category}</Text>
+        </View>
+
+        {/* Imagen con overlay + fallback */}
+        <View style={styles.imageContainer}>
+          <Image
+            source={{ uri: broken ? FALLBACK_IMG : slide.img }}
+            style={styles.slideImage}
+            onError={() => setBroken(true)}
+          />
+          <View
+            style={[
+              styles.imageOverlay,
+              { backgroundColor: 'rgba(255,255,255,0.98)', borderColor: color, borderWidth: 1 },
+            ]}
+          >
+            <Text style={[styles.slideIcon, { color }]}>{slide.icon}</Text>
+          </View>
+          <View style={styles.imageGradient} />
+        </View>
+
+        {/* Texto del slide */}
+        <View style={styles.slideTextContainer}>
+          <Text style={styles.slideText}>{slide.mensaje}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 export default function Inicio() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   const [activeSlide, setActiveSlide] = useState(0);
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef<ScrollView | null>(null);
 
   useEffect(() => {
     Animated.parallel([
@@ -79,11 +141,14 @@ export default function Inicio() {
       <SafeAreaView style={styles.safeArea}>
         {/* Header Profesional */}
         <View style={styles.header}>
-          <Animated.View 
-            style={[styles.headerContent, { 
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }]
-            }]}
+          <Animated.View
+            style={[
+              styles.headerContent,
+              {
+                opacity: fadeAnim,
+                transform: [{ translateY: slideAnim }],
+              },
+            ]}
           >
             <View style={styles.headerTop}>
               <View style={styles.logoContainer}>
@@ -99,13 +164,12 @@ export default function Inicio() {
           </Animated.View>
         </View>
 
-        <ScrollView 
+        <ScrollView
           ref={scrollViewRef}
           contentContainerStyle={styles.container}
           showsVerticalScrollIndicator={false}
-          bounces={true}
+          bounces
         >
-
           {/* Slides de iniciativas */}
           <View style={styles.slidesSection}>
             <View style={styles.sectionHeader}>
@@ -114,42 +178,20 @@ export default function Inicio() {
                 <Text style={styles.seeAllText}>Ver todas →</Text>
               </TouchableOpacity>
             </View>
-            
-            <ScrollView 
-              horizontal 
+
+            <ScrollView
+              horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.slidesContainer}
               snapToInterval={width * 0.85}
               decelerationRate="fast"
             >
               {slides.map((slide, i) => (
-                <TouchableOpacity 
-                  key={i} 
-                  style={styles.slideCard}
+                <SlideCard
+                  key={`${slide.category}-${i}`}
+                  slide={slide}
                   onPress={() => handleSlidePress(i)}
-                  activeOpacity={0.9}
-                >
-                  <View style={styles.slideContent}>
-                    {/* Indicador de categoría */}
-                    <View style={styles.categoryBadge}>
-                      <Text style={styles.categoryText}>{slide.category}</Text>
-                    </View>
-                    
-                    {/* Imagen con overlay */}
-                    <View style={styles.imageContainer}>
-                      <Image source={{ uri: slide.img }} style={styles.slideImage} />
-                      <View style={styles.imageOverlay}>
-                        <Text style={styles.slideIcon}>{slide.icon}</Text>
-                      </View>
-                      <View style={styles.imageGradient} />
-                    </View>
-
-                    {/* Contenido del slide */}
-                    <View style={styles.slideTextContainer}>
-                      <Text style={styles.slideText}>{slide.mensaje}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                />
               ))}
             </ScrollView>
           </View>
@@ -157,22 +199,27 @@ export default function Inicio() {
           {/* Misión */}
           <View style={styles.missionSection}>
             <Text style={styles.sectionTitle}>🏆 Nuestra Misión</Text>
-            
+
             <View style={styles.missionCard}>
               <Text style={styles.missionText}>
-                Protegemos los recursos naturales y promovemos prácticas sostenibles 
+                Protegemos los recursos naturales y promovemos prácticas sostenibles
                 para un futuro próspero y equitativo.
               </Text>
-              
+
               {/* Valores */}
               <View style={styles.valuesContainer}>
                 {[
                   { icon: '🛡️', text: 'Proteger', color: '#4CAF50' },
                   { icon: '🌱', text: 'Conservar', color: '#2196F3' },
-                  { icon: '🤝', text: 'Colaborar', color: '#FF9800' }
+                  { icon: '🤝', text: 'Colaborar', color: '#FF9800' },
                 ].map((value, index) => (
                   <TouchableOpacity key={index} style={styles.valueItem}>
-                    <View style={[styles.valueIconContainer, { backgroundColor: value.color + '20' }]}>
+                    <View
+                      style={[
+                        styles.valueIconContainer,
+                        { backgroundColor: value.color + '20' },
+                      ]}
+                    >
                       <Text style={styles.valueIcon}>{value.icon}</Text>
                     </View>
                     <Text style={styles.valueText}>{value.text}</Text>
@@ -190,7 +237,7 @@ export default function Inicio() {
               <Text style={styles.ctaText}>
                 Cada acción cuenta. Sé parte de la solución para un futuro sostenible.
               </Text>
-              
+
               <TouchableOpacity style={styles.ctaButton}>
                 <Text style={styles.ctaButtonText}>Comenzar Ahora</Text>
                 <Text style={styles.ctaButtonIcon}>→</Text>
@@ -226,18 +273,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
   },
-  headerContent: {
-    flex: 1,
-  },
+  headerContent: { flex: 1 },
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  logoContainer: { flexDirection: 'row', alignItems: 'center' },
   logo: {
     width: 40,
     height: 40,
@@ -247,115 +289,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 12,
   },
-  logoIcon: {
-    fontSize: 20,
-  },
-  headerTitle: {
-    color: '#FFFFFF',
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  headerSubtitle: {
-    color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: 12,
-    marginTop: 2,
-  },
-  notificationButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  notificationIcon: {
-    fontSize: 18,
-    color: '#FFFFFF',
-  },
+  logoIcon: { fontSize: 20 },
+  headerTitle: { color: '#FFFFFF', fontSize: 22, fontWeight: 'bold' },
+  headerSubtitle: { color: 'rgba(255, 255, 255, 0.8)', fontSize: 12, marginTop: 2 },
+
   container: {
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 40,
   },
-  heroSection: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 24,
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  heroContent: {
-    alignItems: 'center',
-  },
-  heroTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1B5E20',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  heroSubtitle: {
-    fontSize: 16,
-    color: '#6B7280',
-    textAlign: 'center',
-    lineHeight: 24,
-    marginBottom: 24,
-    paddingHorizontal: 10,
-  },
-  quickActions: {
-    flexDirection: 'row',
-    gap: 15,
-  },
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 25,
-    gap: 8,
-  },
-  primaryAction: {
-    backgroundColor: '#1B5E20',
-  },
-  secondaryAction: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderColor: '#1B5E20',
-  },
-  actionIcon: {
-    fontSize: 16,
-  },
-  actionText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  slidesSection: {
-    marginBottom: 24,
-  },
+
+  slidesSection: { marginBottom: 24 },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1B5E20',
-  },
-  seeAllText: {
-    fontSize: 14,
-    color: '#2196F3',
-    fontWeight: '600',
-  },
-  slidesContainer: {
-    paddingRight: 20,
-  },
+  sectionTitle: { fontSize: 20, fontWeight: 'bold', color: '#1B5E20' },
+  seeAllText: { fontSize: 14, color: '#2196F3', fontWeight: '600' },
+
+  slidesContainer: { paddingRight: 20 },
   slideCard: {
     width: width * 0.8,
     marginRight: 15,
@@ -368,37 +322,29 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  slideContent: {
-    flex: 1,
-  },
+  slideContent: { flex: 1 },
+
   categoryBadge: {
     position: 'absolute',
     top: 12,
     left: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 6,
     zIndex: 2,
   },
-  categoryText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#1B5E20',
-  },
-  imageContainer: {
-    position: 'relative',
-    height: 180,
-  },
+  categoryText: { fontSize: 12, fontWeight: '700' },
+
+  imageContainer: { position: 'relative', height: 180 },
   slideImage: {
     width: '100%',
     height: '100%',
+    backgroundColor: '#e5e7eb',
   },
   imageOverlay: {
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 20,
     width: 40,
     height: 40,
@@ -406,9 +352,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 2,
   },
-  slideIcon: {
-    fontSize: 20,
-  },
+  slideIcon: { fontSize: 20 },
   imageGradient: {
     position: 'absolute',
     bottom: 0,
@@ -417,9 +361,8 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: 'rgba(0,0,0,0.2)',
   },
-  slideTextContainer: {
-    padding: 16,
-  },
+
+  slideTextContainer: { padding: 16 },
   slideText: {
     fontSize: 16,
     color: '#111827',
@@ -427,9 +370,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
   },
-  missionSection: {
-    marginBottom: 24,
-  },
+
+  missionSection: { marginBottom: 24 },
   missionCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
@@ -447,14 +389,8 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 24,
   },
-  valuesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  valueItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
+  valuesContainer: { flexDirection: 'row', justifyContent: 'space-around' },
+  valueItem: { alignItems: 'center', flex: 1 },
   valueIconContainer: {
     width: 60,
     height: 60,
@@ -463,36 +399,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-  valueIcon: {
-    fontSize: 24,
-  },
-  valueText: {
-    fontSize: 14,
-    color: '#111827',
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  valueDot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-  },
-  ctaSection: {
-    marginBottom: 24,
-  },
-  ctaCard: {
-    backgroundColor: '#1B5E20',
-    borderRadius: 16,
-    padding: 24,
-    alignItems: 'center',
-  },
-  ctaTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
+  valueIcon: { fontSize: 24 },
+  valueText: { fontSize: 14, color: '#111827', fontWeight: '600', marginBottom: 4 },
+  valueDot: { width: 4, height: 4, borderRadius: 2 },
+
+  ctaSection: { marginBottom: 24 },
+  ctaCard: { backgroundColor: '#1B5E20', borderRadius: 16, padding: 24, alignItems: 'center' },
+  ctaTitle: { fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 8, textAlign: 'center' },
   ctaText: {
     fontSize: 14,
     color: 'rgba(255, 255, 255, 0.9)',
@@ -509,20 +422,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  ctaButtonText: {
-    color: '#1B5E20',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  ctaButtonIcon: {
-    color: '#1B5E20',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  footerSection: {
-    alignItems: 'center',
-    paddingVertical: 20,
-  },
+  ctaButtonText: { color: '#1B5E20', fontSize: 16, fontWeight: '600' },
+  ctaButtonIcon: { color: '#1B5E20', fontSize: 16, fontWeight: 'bold' },
+
+  footerSection: { alignItems: 'center', paddingVertical: 20 },
   footerQuote: {
     fontSize: 16,
     color: '#6B7280',
@@ -531,9 +434,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     lineHeight: 22,
   },
-  footerAuthor: {
-    fontSize: 14,
-    color: '#9CA3AF',
-    fontWeight: '500',
-  },
+  footerAuthor: { fontSize: 14, color: '#9CA3AF', fontWeight: '500' },
 });
