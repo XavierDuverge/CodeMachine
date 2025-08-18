@@ -238,10 +238,7 @@ export default function Inicio() {
                 Cada acción cuenta. Sé parte de la solución para un futuro sostenible.
               </Text>
 
-              <TouchableOpacity style={styles.ctaButton}>
-                <Text style={styles.ctaButtonText}>Comenzar Ahora</Text>
-                <Text style={styles.ctaButtonIcon}>→</Text>
-              </TouchableOpacity>
+              
             </View>
           </View>
 

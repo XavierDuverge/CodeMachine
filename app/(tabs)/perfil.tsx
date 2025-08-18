@@ -93,7 +93,6 @@ export default function Perfil() {
       <View style={[s.card, { borderColor: PALETTE.border }]}>
         <Row label="Correo" value={user.correo} />
         <Row label="Teléfono" value={user.telefono || '—'} />
-        <Row label="Cédula" value={user.cedula || '—'} />
       </View>
 
       <View style={[s.card, { borderColor: PALETTE.border }]}>

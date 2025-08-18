@@ -92,10 +92,11 @@ export default function ReportDamageScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         {/* Botón Volver */}
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backText}>← Volver</Text>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.push('/(tabs)/explore')}>
+                <Text style={styles.backButtonText}>← Explorer</Text>
+              </TouchableOpacity>
         <Text style={styles.title}>Reportar Daño Ambiental</Text>
-         </TouchableOpacity>
+         
 
         {/* Input Título */}
         <TextInput
@@ -208,13 +209,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E8F5E9",
     padding: 25,
+    marginTop: 50,
   },
   title: {
     fontSize: 28,
     fontWeight: "900",
-    marginBottom: 30,
+    marginBottom: 20,
     textAlign: "center",
     color: "#1b5e20",
+    marginTop: 30,
   },
   input: {
     borderWidth: 2,
@@ -270,7 +273,6 @@ const styles = StyleSheet.create({
   backButton: {
     alignSelf: "flex-start",
     marginBottom: 15,
-    backgroundColor: "#4caf50",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -280,4 +282,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
+  backButtonText: { fontSize: 16, color: '#1B5E20', fontWeight: 'bold' },
 });

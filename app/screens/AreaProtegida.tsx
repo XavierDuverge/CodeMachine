@@ -127,7 +127,7 @@ export default function AreasProtegidasScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#F8F9FA" },
-  backButton: { marginBottom: 10 },
+  backButton: { marginBottom: 10, marginTop: 22 },
   backButtonText: { fontSize: 16, color: "#1B5E20", fontWeight: "bold" },
 
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, textAlign: "center" },

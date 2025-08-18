@@ -87,7 +87,7 @@ export default function MedidasScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: '#E8F5E9' },
-  backButton: { marginBottom: 10 },
+  backButton: { marginBottom: 10, marginTop: 24 },
   backButtonText: { fontSize: 16, color: '#1B5E20', fontWeight: 'bold' },
 
   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 16, color: '#1B5E20', textAlign: 'center' },
