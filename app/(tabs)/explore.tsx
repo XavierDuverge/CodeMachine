@@ -54,6 +54,15 @@ export default function ExploreScreen() {
       accent: "#c5f8caff"
     },
     {
+      title: "Mapa de Áreas",
+      description: "Visualiza todas las áreas en un mapa interactivo",
+      icon: "🗺️",
+      route: "/screens/areas-mapa",
+      buttonText: "Abrir mapa",
+      color: "#ffffff",
+      accent: "#E8F5E9"
+    },
+    {
       title: "Reportar Daño",
       description: "Reporta daños ambientales con fotos y ubicación GPS",
       icon: "⚠️",

@@ -154,7 +154,7 @@ function Row({ label, value }: { label: string; value: string }) {
 const s = StyleSheet.create({
   safe: { flex: 1, padding: 20 },
 
-  // --- CENTRADO sin sesión ---
+ 
   // CENTRADO sin sesión
   centerWrap: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   h1Center: { fontSize: 22, fontWeight: '800', textAlign: 'center', marginBottom: 12 },
