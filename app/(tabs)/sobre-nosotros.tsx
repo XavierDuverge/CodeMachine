@@ -206,9 +206,6 @@ export default function SobreNosotros() {
               El Ministerio de Medio Ambiente trabaja incansablemente para garantizar 
               la conservación de nuestros recursos naturales para las futuras generaciones.
             </Text>
-            <TouchableOpacity style={styles.ctaButton}>
-              <Text style={styles.ctaButtonText}>Conoce Más →</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>

@@ -2,15 +2,15 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    Linking,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  Linking,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const API_BASE = "https://adamix.net/medioambiente";
@@ -90,7 +90,7 @@ export default function AreaDetail() {
   const openInAppMap = () => {
     if (!area) return;
     router.push({
-      pathname: "./screens/areas-mapa",
+      pathname: "/screens/areas-mapa",
       params: { focusId: area.id, lat: String(area.latitud), lng: String(area.longitud) },
     });
   };
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginTop: 50,
   },
   topLink: { fontWeight: "700" },
   h1: { fontSize: 18, fontWeight: "800" },
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    marginTop: 6,
+    marginTop: 46,
   },
 
   title: { fontSize: 20, fontWeight: "800", color: PALETTE.text },
@@ -216,6 +217,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
+    
   },
   btnPrimary: { backgroundColor: PALETTE.primary },
   btnPrimaryText: { fontWeight: "800", color: PALETTE.onPrimary },

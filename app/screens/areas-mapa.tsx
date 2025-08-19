@@ -245,7 +245,7 @@ export default function AreasMapaScreen() {
                       // - Ej: app/screens/area/[id].tsx
                       // - Puedes pasar el objeto serializado para evitar otro fetch
                       router.push({
-                        pathname: "./screens/area/[id]",
+                        pathname: "/screens/area/[id]",
                         params: { id: a.id, item: JSON.stringify(a) },
                       })
                     }

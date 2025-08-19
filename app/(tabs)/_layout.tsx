@@ -1,12 +1,12 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from 'expo-router';
+import React from 'react';
+import { Platform } from 'react-native';
 
 // 👇 Importa el contexto para cambiar el título según sesión
 import { useAuth } from '../_layout';
@@ -51,10 +51,12 @@ export default function TabLayout() {
         name="perfil"
         options={{
           title: user ? 'Perfil' : 'Entrar',
-          tabBarIcon: ({ color }) => (
-            // Usa un símbolo seguro en iOS; en Android IconSymbol te lo resuelve
-            <IconSymbol size={28} name="person.fill" color={color} />
-          ),
+          tabBarIcon: ({ color, size }) =>
+           Platform.OS === "ios" ? (
+        <IconSymbol size={size ?? 28} name="person.fill" color={color} />
+      ) : (
+        <Ionicons name="person" size={size ?? 28} color={color} />
+      ),
         }}
       />
     </Tabs>
