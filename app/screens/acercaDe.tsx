@@ -7,17 +7,17 @@ type Member = {
   name: string;
   matricula: string;
   phone: string;
-  telegram?: string; // opcional, ya no se usa como botón
-  photo?: string;
+  telegram?: string; 
+  photo?: string | number; 
 };
 
 const team: Member[] = [
-  { name: "Rolando Mañón", matricula: "2023-1022", phone: "+18296396727", photo: "https://via.placeholder.com/100" },
-  { name: "Xavier Duvergé", matricula: "2023-0977", phone: "+18097815922", photo: "https://via.placeholder.com/100" },
-  { name: "Andriws Castillo", matricula: "2023-0940", phone: "+18099523202", photo: "https://via.placeholder.com/100" },
+  { name: "Rolando Mañón", matricula: "2023-1022", phone: "+18296396727", photo:  require("../../assets/images/ronaldfoto.jpeg") },
+  { name: "Xavier Duvergé", matricula: "2023-0977", phone: "+18097815922", photo: require("../../assets/images/xavifoto.jpeg") },
+  { name: "Andriws Castillo", matricula: "2023-0940", phone: "+18099523202", photo:  require("../../assets/images/andriewfoto.jpeg") },
   { name: "Jordys Valenzuela", matricula: "2023-0957", phone: "+18095550004", photo: require("../../assets/images/FotoJordys.jpg") },
-  { name: "José Ángel de Jesús", matricula: "2023-0954", phone: "+18298839061", photo: "https://via.placeholder.com/100" },
-  { name: "Cristian Ledesma", matricula: "2023-0967", phone: "+18492726355", photo: "https://via.placeholder.com/100" },
+  { name: "José Ángel de Jesús", matricula: "2023-0954", phone: "+18298839061", photo: require("../../assets/images/fotoJose.jpeg") },
+  { name: "Cristian Ledesma", matricula: "2023-0967", phone: "+18492726355", photo:  require("../../assets/images/ledesmafoto.jpeg") },
   { name: "Bily Álvarez", matricula: "2023-0952", phone: "+18292679095", photo: require("../../assets/images/FotoBily.jpg") },
 ];
 
@@ -35,7 +35,7 @@ export default function AboutUsScreen() {
         style={styles.backButton}
         onPress={() => router.push("/(tabs)/explore")}
       >
-        
+
         <Text style={styles.backButtonText}>← Explorer</Text>
       </TouchableOpacity>
 
@@ -43,12 +43,19 @@ export default function AboutUsScreen() {
 
       {team.map((member, index) => (
         <View key={index} style={styles.card}>
-          <Image source={{ uri: member.photo }} style={styles.photo} />
+          <Image
+            source={
+              typeof member.photo === "string"
+                ? { uri: member.photo }
+                : member.photo
+            }
+            style={styles.photo}
+          />
 
           <View style={styles.info}>
             <Text style={styles.name}>{member.name}</Text>
             <Text style={styles.matricula}>Matrícula: {member.matricula}</Text>
-            <Text style={styles.telegram}>Telegram: {member.phone}</Text>
+            <Text style={styles.telegram}>Teléfono: {member.phone}</Text>
 
             <View style={styles.actions}>
               <TouchableOpacity style={styles.button} onPress={() => handleCall(member.phone)}>
