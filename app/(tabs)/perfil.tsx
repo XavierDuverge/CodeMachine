@@ -120,12 +120,6 @@ export default function Perfil() {
             <Text style={s.chev}>›</Text>
           </TouchableOpacity>
         </Link>
-        <Link href="/(protected)/cambiar-password" asChild>
-          <TouchableOpacity style={s.linkRow}>
-            <Text style={s.linkText}>🔐 Cambiar Contraseña</Text>
-            <Text style={s.chev}>›</Text>
-          </TouchableOpacity>
-        </Link>
         
       </View>
 
